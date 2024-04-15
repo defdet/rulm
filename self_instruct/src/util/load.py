@@ -24,10 +24,12 @@ def load_saiga(
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             load_in_8bit=True if use_8bit else False,
-            device_map="auto"
+            device_map="auto",
+            torch_dtype=torch.bfloat16
         )
         model.eval()
         return model, tokenizer, generation_config
+    
 
     config = PeftConfig.from_pretrained(model_name)
     base_model_config = AutoConfig.from_pretrained(config.base_model_name_or_path)
