@@ -21,6 +21,7 @@ def load_saiga(
     generation_config = GenerationConfig.from_pretrained(model_name)
 
     if not is_lora:
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             load_in_8bit=True if use_8bit else False,
