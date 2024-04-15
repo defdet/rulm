@@ -17,7 +17,7 @@ def load_saiga(
     use_flash_attention_2: bool = False
 ):
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
     generation_config = GenerationConfig.from_pretrained(model_name)
 
     if not is_lora:
