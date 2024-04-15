@@ -26,6 +26,7 @@ def generate(
     generation_config,
     debug: bool = True
 ):
+    tokenizer.eos_token_id = 151645
     data = tokenizer(
         prompts,
         return_tensors="pt",
@@ -35,6 +36,8 @@ def generate(
     data = {k: v.to(model.device) for k, v in data.items()}
     output_ids = model.generate(
         **data,
+        pad_token_id=tokenizer.eos_token_id,
+        eos_token_id=tokenizer.eos_token_id
         generation_config=generation_config
     )
     outputs = []
