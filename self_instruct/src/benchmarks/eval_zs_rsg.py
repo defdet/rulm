@@ -748,6 +748,7 @@ def main(
     model_name,
     nrows: int = None,
     template_path: str = "internal_prompts/saiga_v2.json",
+    is_lora: bool = False,
     split: str = "test",
     predictions_dir: str = "submission",
     debug: bool = False,
@@ -759,7 +760,7 @@ def main(
     predict_long = None
 
     if model_name not in ("gpt-4", "gpt-3.5-turbo"):
-        model, tokenizer, generation_config = load_saiga(model_name)
+        model, tokenizer, generation_config = load_saiga(model_name, is_lora=is_lora)
         generation_config.no_repeat_ngram_size = 64
         generation_config.temperature = 0.01
 
