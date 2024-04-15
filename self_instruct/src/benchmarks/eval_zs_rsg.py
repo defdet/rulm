@@ -37,7 +37,7 @@ def generate(
     output_ids = model.generate(
         **data,
         pad_token_id=tokenizer.eos_token_id,
-        eos_token_id=tokenizer.eos_token_id
+        eos_token_id=tokenizer.eos_token_id,
         generation_config=generation_config
     )
     outputs = []
