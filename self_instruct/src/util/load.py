@@ -10,6 +10,7 @@ from peft import PeftConfig, PeftModel
 def load_saiga(
     model_name: str,
     use_4bit: bool = False,
+    use_8bit: bool = False,
     torch_compile: bool = False,
     torch_dtype: str = None,
     is_lora: bool = True,
@@ -22,7 +23,7 @@ def load_saiga(
     if not is_lora:
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            load_in_8bit=True,
+            load_in_8bit=True if use_8bit else False,
             device_map="auto"
         )
         model.eval()
@@ -57,7 +58,7 @@ def load_saiga(
             model = AutoModelForCausalLM.from_pretrained(
                 config.base_model_name_or_path,
                 torch_dtype=torch_dtype,
-                load_in_8bit=True,
+                load_in_8bit=True if use_8bit else False,
                 device_map="auto",
                 use_flash_attention_2=use_flash_attention_2
             )
