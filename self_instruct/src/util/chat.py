@@ -62,7 +62,7 @@ class Conversation:
             return self.user_message_template.format(**message)
         return self.bot_message_template.format(**message)
 
-    def get_prompt(self, tokenizer, max_tokens: int = None, add_suffix: bool = True):
+    def get_prompt(self, tokenizer, max_tokens: int = None, add_suffix: bool = False):
         messages = self.messages
         if max_tokens is not None:
             messages = self.shrink(tokenizer, messages, max_tokens)
