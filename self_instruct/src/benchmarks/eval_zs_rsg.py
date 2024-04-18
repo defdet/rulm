@@ -50,6 +50,8 @@ def generate(
             print(sample_output)
             print()
         outputs.append(sample_output)
+    if debug:
+        print(f'WHOLE GENERATED OUTPUT IS \n{outputs} \n END OF OUTPUT \n')
     return outputs
 
 
@@ -69,6 +71,7 @@ def predict_saiga_zero_shot(
         conversation.add_user_message(prompt)
         prompt = conversation.get_prompt(tokenizer, max_tokens=max_prompt_tokens)
         clean_prompts.append(prompt)
+    print(f'WHOLE PROMPT IS \n {clean_prompts} \n END OF PROMPT \n')
     return generate(
         model=model,
         tokenizer=tokenizer,
