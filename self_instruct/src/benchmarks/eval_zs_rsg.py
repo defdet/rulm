@@ -106,6 +106,7 @@ DANETQA_NO_RE = re.compile(
 
 def clean_danetqa_response(response):
     result = True
+    response = response.replace('assistant\n', '')
     if bool(DANETQA_YES_RE.match(response)):
         result = True
     elif bool(DANETQA_NO_RE.match(response)):
@@ -179,6 +180,7 @@ def terra_to_bool(response):
 
 def clean_terra_response(response):
     result = "not_entailment"
+    response = response.replace('assistant\n', '')
     if bool(TERRA_ENTAILMENT_RE.match(response)):
         result = "entailment"
     elif bool(TERRA_NOT_ENTAILMENT_RE.match(response)):
@@ -236,6 +238,7 @@ RWSD_PROMPT = 'Текст: "{text}"\nНа основе текста одним �
 
 
 def clean_rwsd_response(response, span1):
+    response = response.replace('assistant\n', '')
     lcs = find_lcs(span1.lower(), response.lower())
     return len(lcs) >= 3
 
@@ -303,6 +306,7 @@ MUSERC_SINGLE_NO_RE = re.compile(
 
 
 def clean_muserc_single_response(response):
+    response = response.replace('assistant\n', '')
     result = False
     if bool(MUSERC_SINGLE_YES_RE.match(response)):
         result = True
@@ -396,6 +400,7 @@ RUCOS_PROMPT = """Контекст: {text}
 
 
 def clean_rucos_response(response, entities):
+    response = response.replace('assistant\n', '')
     answers = []
     for answer in entities:
         lcs = find_lcs(response.strip(), answer.strip())
@@ -478,6 +483,7 @@ def lidirus_to_bool(response):
 
 
 def clean_lidirus_response(response):
+    response = response.replace('assistant\n', '')
     result = "not_entailment"
     if bool(LIDIRUS_ENTAILMENT_RE.match(response)):
         result = "entailment"
@@ -614,6 +620,7 @@ RCB_NO_RE = re.compile(
 
 
 def clean_rcb_response(response):
+    response = response.replace('assistant\n', '')
     is_contradiction = bool(RCB_NO_RE.match(response))
     is_entailment = bool(RCB_YES_RE.match(response))
     if is_contradiction:
@@ -691,6 +698,7 @@ RUSSE_NO_RE = re.compile(
 
 
 def clean_russe_response(response):
+    response = response.replace('assistant\n', '')
     if bool(RUSSE_YES_RE.match(response)):
         return 0
     if bool(RUSSE_NO_RE.match(response)):
