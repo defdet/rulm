@@ -32,17 +32,11 @@ def load_easydel(path):
     param_dtype=jax.numpy.bfloat16,
     precision=jax.lax.Precision("fastest"),
     sharding_axis_dims=(1, 1, 4, 4),
-    query_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
-    generation_query_partition_spec=PartitionSpec(("dp", "fsdp"), None, None, "tp"),
-    key_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
-    value_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
-    bias_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "sp"),
-    attention_partition_spec=PartitionSpec(("dp", "fsdp"), None,"sp", "tp"),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 4096),
+    input_shape=(1, 2048),
     config_kwargs={
-        "attn_mechanism": "ring",
+        "attn_mechanism": "flash",
     },
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
@@ -64,7 +58,7 @@ def generate_easydel(
       return_tensors="jax",
       truncation=True,
       padding='max_length',
-      max_length=4096,
+      max_length=2048,
   )
   with jax.spmd_mode('allow_all'):
     output_ids = model.generate(
