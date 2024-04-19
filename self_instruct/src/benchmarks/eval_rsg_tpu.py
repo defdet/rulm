@@ -37,7 +37,7 @@ def load_easydel(path):
         "attn_mechanism": "ring",
     },
   )
-  generation_config=transformers.GenerationConfig.from_pretrained(model_name)
+  generation_config=transformers.GenerationConfig.from_pretrained(path)
   generation_config.eos_token_id=151645
   generation_config.pad_token_id=151645
   return model, params, tokenizer, generation_config
