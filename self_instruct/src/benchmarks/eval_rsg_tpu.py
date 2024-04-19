@@ -57,13 +57,14 @@ def generate_easydel(
       padding='max_length',
       max_length=4096,
   )
-  output_ids = model.generate(
-    input_ids=data["input_ids"],
-    attention_mask=data["attention_mask"],
-    params={"params": params},
-    generation_config=generation_config,
-    max_new_tokens=1024,
-  )
+  with jax.spmd_mode('allow_all'):
+    output_ids = model.generate(
+      input_ids=data["input_ids"],
+      attention_mask=data["attention_mask"],
+      params={"params": params},
+      generation_config=generation_config,
+      max_new_tokens=1024,
+    )
   outputs = []
   for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
