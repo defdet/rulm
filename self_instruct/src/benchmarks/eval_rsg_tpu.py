@@ -34,9 +34,13 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 2048),
+    input_shape=(device_num, 1),
     config_kwargs={
         "attn_mechanism": "ring",
+        block_b=1,
+        block_q=128,
+        block_k=128,
+        block_k_major=128,
     },
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
