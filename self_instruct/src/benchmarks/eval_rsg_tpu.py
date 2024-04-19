@@ -34,7 +34,7 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(device_num, 1),
+    input_shape=(16, 1),
     config_kwargs={
         "attn_mechanism": "ring",
     },
