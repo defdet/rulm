@@ -35,7 +35,7 @@ def load_easydel(path):
     key_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
     value_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
     bias_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "sp"),
-    attention_partition_spec=PartitionSpec(("dp", "fsdp"), None,"sp", "tp")
+    attention_partition_spec=PartitionSpec(("dp", "fsdp"), None,"sp", "tp"),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
     input_shape=(1, 4096),
