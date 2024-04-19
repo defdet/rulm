@@ -21,7 +21,7 @@ import EasyDel, jax, transformers
 HF_DATASET = "RussianNLP/russian_super_glue"
 
 def load_easydel(path):
-  tokenizer = AutoTokenizer.from_pretrained(path, padding_side='left')
+  tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
   model, params = EasyDel.AutoEasyDelModelForCausalLM.from_pretrained(
     pretrained_model_name_or_path = path,
     device=jax.devices('cpu')[0],
@@ -37,7 +37,7 @@ def load_easydel(path):
         "attn_mechanism": "ring",
     },
   )
-  generation_config=GenerationConfig.from_pretrained(model_name)
+  generation_config=transformers.GenerationConfig.from_pretrained(model_name)
   generation_config.eos_token_id=151645
   generation_config.pad_token_id=151645
   return model, params, tokenizer, generation_config
