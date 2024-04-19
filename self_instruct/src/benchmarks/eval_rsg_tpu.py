@@ -16,7 +16,9 @@ from src.util.dl import gen_batch
 from src.util.load import load_saiga
 from src.util.openai import openai_batch_completion, OpenAIDecodingArguments
 import EasyDel, jax, transformers
-
+from jax.sharding import PartitionSpec
+from typing import Sequence, Optional
+from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
 
