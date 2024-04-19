@@ -63,9 +63,9 @@ def generate_easydel(
     params={"params": params},
     generation_config=generation_config,
     max_new_tokens=1024,
-)
-outputs = []
-for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
+  )
+  outputs = []
+  for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
     sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
     sample_output = sample_output.replace("</s>", "").strip()
@@ -74,7 +74,7 @@ for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
         print(sample_output)
         print()
     outputs.append(sample_output)
-return outputs
+  return outputs
   
 
 def generate(
