@@ -54,7 +54,7 @@ def generate_easydel(
       prompts,
       return_tensors="jax",
       truncation=True,
-      padding=True,
+      padding='max_length',
       max_length=4096,
   )
   output_ids = model.generate(
