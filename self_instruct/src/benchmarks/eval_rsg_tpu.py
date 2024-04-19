@@ -30,6 +30,12 @@ def load_easydel(path):
     param_dtype=jax.numpy.bfloat16,
     precision=jax.lax.Precision("fastest"),
     sharding_axis_dims=(1, 1, 4, 4),
+    query_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
+    generation_query_partition_spec=PartitionSpec(("dp", "fsdp"), None, None, "tp"),
+    key_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
+    value_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "tp"),
+    bias_partition_spec=PartitionSpec(("dp", "fsdp"), None, "sp", "sp"),
+    attention_partition_spec=PartitionSpec(("dp", "fsdp"), None,"sp", "tp")
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
     input_shape=(1, 4096),
@@ -40,6 +46,7 @@ def load_easydel(path):
   generation_config=transformers.GenerationConfig.from_pretrained(path)
   generation_config.eos_token_id=151645
   generation_config.pad_token_id=151645
+  generation_config.do_sample=True
   return model, params, tokenizer, generation_config
 
 def generate_easydel(
