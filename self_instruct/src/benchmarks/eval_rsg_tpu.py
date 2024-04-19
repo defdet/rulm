@@ -24,22 +24,22 @@ def load_easydel(path):
   tokenizer = AutoTokenizer.from_pretrained(path, padding_side='left')
   model, params = EasyDel.AutoEasyDelModelForCausalLM.from_pretrained(
     pretrained_model_name_or_path = path,
-    device = jax.devices('cpu')[0],
-    device_map = "auto",
-    dtype = jax.numpy.bfloat16,
-    param_dtype = jax.numpy.bfloat16,
-    precision = jax.lax.Precision("fastest"),
-    sharding_axis_dims = (1, 1, 4, 4),
-    sharding_axis_names = ("dp", "fsdp", "tp", "sp"),
-    backend = "tpu",
-    input_shape = (1, 4096),
-    config_kwargs = {
+    device=jax.devices('cpu')[0],
+    device_map="auto",
+    dtype=jax.numpy.bfloat16,
+    param_dtype=jax.numpy.bfloat16,
+    precision=jax.lax.Precision("fastest"),
+    sharding_axis_dims=(1, 1, 4, 4),
+    sharding_axis_names=("dp", "fsdp", "tp", "sp"),
+    backend="tpu",
+    input_shape=(1, 4096),
+    config_kwargs={
         "attn_mechanism": "ring",
     },
   )
-  generation_config = GenerationConfig.from_pretrained(model_name)
-  generation_config.eos_token_id = 151645
-  generation_config.pad_token_id = 151645
+  generation_config=GenerationConfig.from_pretrained(model_name)
+  generation_config.eos_token_id=151645
+  generation_config.pad_token_id=151645
   return model, params, tokenizer, generation_config
 
 def generate_easydel(
@@ -61,8 +61,8 @@ def generate_easydel(
     input_ids=data["input_ids"],
     attention_mask=data["attention_mask"],
     params={"params": params},
-    generation_config = generation_config,
-    max_new_tokens = 1024,
+    generation_config=generation_config,
+    max_new_tokens=1024,
 )
 outputs = []
 for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
