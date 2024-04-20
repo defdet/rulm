@@ -65,7 +65,7 @@ def inner_generate(
       generation_config=generation_config,
       max_new_tokens=1024,
   ).sequences
-  return np.array(output_ids)
+  return output_ids
 
 def generate_easydel(
   model,
@@ -82,7 +82,7 @@ def generate_easydel(
       padding='max_length',
       max_length=1028,
   )
-  output_ids = inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config)
+  output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
