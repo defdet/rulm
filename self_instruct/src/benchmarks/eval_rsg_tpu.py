@@ -40,7 +40,7 @@ def load_easydel(path):
         use_scan_mlp=False,
         shard_attention_computation=False,
         use_sharded_kv_caching=True,
-        attn_mechanism="local_ring"
+        attn_mechanism="normal"
     ),
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
