@@ -78,9 +78,8 @@ def generate_easydel(
   data = tokenizer(
       prompts,
       return_tensors="jax",
-      truncation=True,
-      padding='max_length',
-      max_length=1024,
+      padding=True,
+      padding_to_multiple_of=128,
   )
   output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
   if debug:
