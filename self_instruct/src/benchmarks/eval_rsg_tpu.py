@@ -67,7 +67,7 @@ def generate_easydel(
       params={"params": params},
       generation_config=generation_config,
       max_new_tokens=1024,
-    ).sequence
+    ).sequences
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
