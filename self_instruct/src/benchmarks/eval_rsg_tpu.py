@@ -67,8 +67,9 @@ def generate_easydel(
       params={"params": params},
       generation_config=generation_config,
       max_new_tokens=1024,
-    )
-  print(f'Output ids: {output_ids}')
+    ).sequence
+  if debug:
+    print(f'Output ids: {output_ids}')
   outputs = []
   for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
