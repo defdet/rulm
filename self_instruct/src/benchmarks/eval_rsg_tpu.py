@@ -877,6 +877,7 @@ def main(
         predict_short = predict_chatgpt_short
 
     if "danetqa" in tasks:
+        print('Predicting danetqa')
         predict_danetqa(
             split=split,
             predict_func=predict_short,
@@ -885,6 +886,7 @@ def main(
         )
 
     if "terra" in tasks:
+        print('Predicting terra')
         predict_terra(
             split=split,
             predict_func=predict_short,
@@ -893,6 +895,7 @@ def main(
         )
 
     if "rwsd" in tasks:
+        print('Predicting rwsd')
         predict_rwsd(
             split=split,
             predict_func=predict_long,
@@ -901,6 +904,7 @@ def main(
         )
 
     if "rucos" in tasks:
+        print('Predicting rucos')
         predict_rucos(
             split=split,
             predict_func=predict_long,
@@ -909,12 +913,14 @@ def main(
         )
 
     if "lidirus" in tasks:
+        print('Predicting lidirus')
         predict_lidirus(
             predict_func=predict_short,
             output_path=predictions_dir / "LiDiRus.jsonl",
             nrows=nrows
         )
     if "parus" in tasks:
+        print('Predicting parus')
         predict_parus(
             split=split,
             predict_func=predict_long,
@@ -922,6 +928,7 @@ def main(
             nrows=nrows
         )
     if "rcb" in tasks:
+        print('Predicting rcb')
         predict_rcb(
             split=split,
             predict_func=predict_long,
@@ -929,6 +936,7 @@ def main(
             nrows=nrows
         )
     if "russe" in tasks:
+        print('Predicting russe')
         predict_russe(
             split=split,
             predict_func=predict_short,
@@ -936,6 +944,7 @@ def main(
             nrows=nrows
         )
     if "muserc" in tasks:
+        print('Predicting muserc')
         predict_muserc(
             split=split,
             predict_func=predict_short,
