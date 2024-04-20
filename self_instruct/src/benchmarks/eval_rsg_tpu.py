@@ -79,7 +79,7 @@ def generate_easydel(
       prompts,
       return_tensors="jax",
       padding=True,
-      padding_to_multiple_of=128,
+      pad_to_multiple_of=128,
   )
   output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
   if debug:
