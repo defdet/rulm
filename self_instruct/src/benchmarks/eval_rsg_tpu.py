@@ -52,7 +52,6 @@ def load_easydel(path):
 
 @partial(jax.jit, static_argnames=('generation_config'))
 def inner_generate(
-  model,
   params,
   input_ids,
   attention_mask,
@@ -83,7 +82,7 @@ def generate_easydel(
       padding='max_length',
       max_length=1028,
   )
-  output_ids = inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config)
+  output_ids = inner_generate(params, data["input_ids"], data['attention_mask'], generation_config)
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
@@ -97,39 +96,6 @@ def generate_easydel(
         print()
     outputs.append(sample_output)
   return outputs
-
-def generate(
-    model,
-    tokenizer,
-    prompts,
-    generation_config,
-    debug: bool = True
-):
-    tokenizer.eos_token_id = 151645
-    data = tokenizer(
-        prompts,
-        return_tensors="pt",
-        truncation=True,
-        padding=True,
-    )
-    data = {k: v.to(model.device) for k, v in data.items()}
-    output_ids = model.generate(
-        **data,
-        pad_token_id=tokenizer.eos_token_id,
-        eos_token_id=tokenizer.eos_token_id,
-        generation_config=generation_config
-    )
-    outputs = []
-    for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
-        sample_output_ids = sample_output_ids[len(sample_input_ids):]
-        sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
-        sample_output = sample_output.replace("</s>", "").strip()
-        if debug:
-            print(tokenizer.decode(sample_input_ids, skip_special_tokens=True))
-            print(sample_output)
-            print()
-        outputs.append(sample_output)
-    return outputs
 
 
 def predict_saiga_zero_shot(
