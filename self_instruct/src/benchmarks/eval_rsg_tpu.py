@@ -35,7 +35,7 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 512),
+    input_shape=(1, 1024),
     config_kwargs=dict(
         gradient_checkpointing="",
         use_scan_mlp=False,
@@ -80,7 +80,7 @@ def generate_easydel(
       return_tensors="jax",
       truncation=True,
       padding='max_length',
-      max_length=512,
+      max_length=1024,
   )
   output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
   if debug:
