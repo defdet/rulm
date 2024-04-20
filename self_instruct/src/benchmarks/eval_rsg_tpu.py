@@ -74,7 +74,7 @@ def generate_easydel(
       max_new_tokens=1024,
     ).sequences
   if debug:
-    print(f'Output ids: {output_ids}')
+    print(f'Output ids: {output_ids}, their shape is {output_ids[0].shape}')
   outputs = []
   for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
