@@ -50,8 +50,9 @@ def load_easydel(path):
   generation_config.do_sample=True
   return model, params, tokenizer, generation_config
 
-@partial(jax.jit, static_argnames=('generation_config'))
+@partial(jax.jit, static_argnames=('model', 'generation_config'))
 def inner_generate(
+  model,
   params,
   input_ids,
   attention_mask,
@@ -82,7 +83,7 @@ def generate_easydel(
       padding='max_length',
       max_length=1028,
   )
-  output_ids = inner_generate(params, data["input_ids"], data['attention_mask'], generation_config)
+  output_ids = inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config)
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
