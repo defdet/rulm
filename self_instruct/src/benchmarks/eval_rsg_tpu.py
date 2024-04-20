@@ -4,7 +4,7 @@ import copy
 from pathlib import Path
 from tqdm import tqdm
 from functools import partial
-
+import numpy as np
 import fire
 from datasets import load_dataset
 from nltk import edit_distance
@@ -65,7 +65,7 @@ def inner_generate(
       generation_config=generation_config,
       max_new_tokens=1024,
   ).sequences
-  return output_ids
+  return np.array(output_ids)
 
 def generate_easydel(
   model,
@@ -86,7 +86,7 @@ def generate_easydel(
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
-  for sample_output_ids, sample_input_ids in zip(output_ids, ):
+  for sample_output_ids, sample_input_ids in zip(output_ids, data['input_ids']):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
     sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
     sample_output = sample_output.replace("</s>", "").strip()
