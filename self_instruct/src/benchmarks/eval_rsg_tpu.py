@@ -63,7 +63,7 @@ def inner_generate(
       attention_mask=attention_mask,
       params={"params": params},
       generation_config=generation_config,
-      max_new_tokens=128,
+      max_new_tokens=16,
   ).sequences
   return output_ids
 
