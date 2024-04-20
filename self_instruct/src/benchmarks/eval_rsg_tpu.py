@@ -3,7 +3,8 @@ import re
 import copy
 from pathlib import Path
 from tqdm import tqdm
-
+from functools import partial
+import numpy as np
 import fire
 from datasets import load_dataset
 from nltk import edit_distance
@@ -34,7 +35,7 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 1024),
+    input_shape=(1, 1028),
     config_kwargs=dict(
         gradient_checkpointing="",
         use_scan_mlp=False,
@@ -49,6 +50,23 @@ def load_easydel(path):
   generation_config.do_sample=True
   return model, params, tokenizer, generation_config
 
+@partial(jax.jit, static_argnames=('model', 'generation_config'))
+def inner_generate(
+  model,
+  params,
+  input_ids,
+  attention_mask,
+  generation_config,
+):
+  output_ids = model.generate(
+      input_ids=input_ids,
+      attention_mask=attention_mask,
+      params={"params": params},
+      generation_config=generation_config,
+      max_new_tokens=1024,
+  ).sequences
+  return np.array(output_ids)
+
 def generate_easydel(
   model,
   params,
@@ -62,22 +80,13 @@ def generate_easydel(
       return_tensors="jax",
       truncation=True,
       padding='max_length',
-      max_length=1024,
+      max_length=1028,
   )
-  print(data['input_ids'].shape, 'SHAPE')
-  jasjfa
-  with jax.spmd_mode('allow_all'):
-    output_ids = model.generate(
-      input_ids=data["input_ids"],
-      attention_mask=data["attention_mask"],
-      params={"params": params},
-      generation_config=generation_config,
-      max_new_tokens=1024,
-    ).sequences
+  output_ids = inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config)
   if debug:
-    print(f'Output ids: {output_ids}, their shape is {output_ids[0].shape}')
+    print(f'Output ids: {output_ids}')
   outputs = []
-  for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
+  for sample_output_ids, sample_input_ids in zip(output_ids, data['input_ids']):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
     sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
     sample_output = sample_output.replace("</s>", "").strip()
@@ -87,40 +96,6 @@ def generate_easydel(
         print()
     outputs.append(sample_output)
   return outputs
-  
-
-def generate(
-    model,
-    tokenizer,
-    prompts,
-    generation_config,
-    debug: bool = True
-):
-    tokenizer.eos_token_id = 151645
-    data = tokenizer(
-        prompts,
-        return_tensors="pt",
-        truncation=True,
-        padding=True,
-    )
-    data = {k: v.to(model.device) for k, v in data.items()}
-    output_ids = model.generate(
-        **data,
-        pad_token_id=tokenizer.eos_token_id,
-        eos_token_id=tokenizer.eos_token_id,
-        generation_config=generation_config
-    )
-    outputs = []
-    for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
-        sample_output_ids = sample_output_ids[len(sample_input_ids):]
-        sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
-        sample_output = sample_output.replace("</s>", "").strip()
-        if debug:
-            print(tokenizer.decode(sample_input_ids, skip_special_tokens=True))
-            print(sample_output)
-            print()
-        outputs.append(sample_output)
-    return outputs
 
 
 def predict_saiga_zero_shot(
