@@ -60,8 +60,8 @@ def inner_generate(
 ):
   with jax.spmd_mode('allow_all'):
     output_ids = model.generate(
-      input_ids=data["input_ids"],
-      attention_mask=data["attention_mask"],
+      input_ids=input_ids,
+      attention_mask=attention_mask,
       params={"params": params},
       generation_config=generation_config,
       max_new_tokens=1024,
