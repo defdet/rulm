@@ -3,6 +3,7 @@ import re
 import copy
 from pathlib import Path
 from tqdm import tqdm
+from functools import partial
 
 import fire
 from datasets import load_dataset
@@ -49,6 +50,7 @@ def load_easydel(path):
   generation_config.do_sample=True
   return model, params, tokenizer, generation_config
 
+@partial(jax.jit, static_argnames=('tokenizer', 'generation_config', 'debug'))
 def generate_easydel(
   model,
   params,
