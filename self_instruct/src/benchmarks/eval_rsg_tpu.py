@@ -34,7 +34,7 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 1028),
+    input_shape=(1, 1024),
     config_kwargs=dict(
         gradient_checkpointing="",
         use_scan_mlp=False,
@@ -62,8 +62,9 @@ def generate_easydel(
       return_tensors="jax",
       truncation=True,
       padding='max_length',
-      max_length=1028,
+      max_length=1024,
   )
+  print(data[0].shape, 'SHAPE')
   with jax.spmd_mode('allow_all'):
     output_ids = model.generate(
       input_ids=data["input_ids"],
