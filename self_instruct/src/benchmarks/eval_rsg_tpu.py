@@ -36,7 +36,7 @@ def load_easydel(path):
     backend="tpu",
     input_shape=(16, 2048),
     config_kwargs={
-        "attn_mechanism": "normal",
+        "attn_mechanism": "flash",
     },
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
