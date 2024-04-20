@@ -64,7 +64,7 @@ def generate_easydel(
       padding='max_length',
       max_length=1024,
   )
-  print(data[0]['input_ids'].shape, 'SHAPE')
+  print(data['input_ids'].shape, 'SHAPE')
   with jax.spmd_mode('allow_all'):
     output_ids = model.generate(
       input_ids=data["input_ids"],
