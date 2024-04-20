@@ -50,7 +50,24 @@ def load_easydel(path):
   generation_config.do_sample=True
   return model, params, tokenizer, generation_config
 
-@partial(jax.jit, static_argnames=('tokenizer', 'generation_config', 'debug'))
+@partial(jax.jit, static_argnames=('generation_config'))
+def inner_generate(
+  model,
+  params,
+  input_ids,
+  attention_mask,
+  generation_config,
+):
+  with jax.spmd_mode('allow_all'):
+    output_ids = model.generate(
+      input_ids=data["input_ids"],
+      attention_mask=data["attention_mask"],
+      params={"params": params},
+      generation_config=generation_config,
+      max_new_tokens=1024,
+    ).sequences
+  return output_ids
+
 def generate_easydel(
   model,
   params,
@@ -66,18 +83,11 @@ def generate_easydel(
       padding='max_length',
       max_length=1028,
   )
-  with jax.spmd_mode('allow_all'):
-    output_ids = model.generate(
-      input_ids=data["input_ids"],
-      attention_mask=data["attention_mask"],
-      params={"params": params},
-      generation_config=generation_config,
-      max_new_tokens=1024,
-    ).sequences
+  output_ids = inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config)
   if debug:
     print(f'Output ids: {output_ids}')
   outputs = []
-  for sample_output_ids, sample_input_ids in zip(output_ids, data["input_ids"]):
+  for sample_output_ids, sample_input_ids in zip(output_ids, ):
     sample_output_ids = sample_output_ids[len(sample_input_ids):]
     sample_output = tokenizer.decode(sample_output_ids, skip_special_tokens=True)
     sample_output = sample_output.replace("</s>", "").strip()
@@ -87,7 +97,6 @@ def generate_easydel(
         print()
     outputs.append(sample_output)
   return outputs
-  
 
 def generate(
     model,
