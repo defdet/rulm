@@ -31,12 +31,12 @@ def load_easydel(path):
     dtype=jax.numpy.bfloat16,
     param_dtype=jax.numpy.bfloat16,
     precision=jax.lax.Precision("fastest"),
-    sharding_axis_dims=(1, -1, 1, 1),
+    sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(16, 2048),
+    input_shape=(1, 1028),
     config_kwargs={
-        "attn_mechanism": "flash",
+        "attn_mechanism": "normal",
     },
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
@@ -58,7 +58,7 @@ def generate_easydel(
       return_tensors="jax",
       truncation=True,
       padding='max_length',
-      max_length=2048,
+      max_length=1028,
   )
   with jax.spmd_mode('allow_all'):
     output_ids = model.generate(
@@ -184,7 +184,7 @@ def predict_danetqa(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = DANETQA_PROMPT,
     clean_func: Callable = clean_danetqa_response
@@ -258,7 +258,7 @@ def predict_terra(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = TERRA_PROMPT,
     clean_func=clean_terra_response
@@ -311,7 +311,7 @@ def predict_rwsd(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = RWSD_PROMPT,
     clean_func: Callable = clean_rwsd_response
@@ -385,7 +385,7 @@ def predict_muserc(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = MUSERC_SINGLE_PROMPT,
     clean_func: Callable = clean_muserc_single_response
@@ -476,7 +476,7 @@ def predict_rucos(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     debug: bool = False,
     template: str = RUCOS_PROMPT,
@@ -561,7 +561,7 @@ def clean_lidirus_response(response):
 def predict_lidirus(
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = LIDIRUS_PROMPT,
     clean_func: Callable = clean_lidirus_response
@@ -615,7 +615,7 @@ def predict_parus(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template_cause: str = PARUS_CAUSE_PROMPT,
     template_effect: str = PARUS_EFFECT_PROMPT
@@ -707,7 +707,7 @@ def predict_rcb(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = RCB_PROMPT,
     clean_func: Callable = clean_rcb_response
@@ -775,7 +775,7 @@ def predict_russe(
     split,
     predict_func,
     output_path,
-    batch_size: int = 16,
+    batch_size: int = 2,
     nrows: int = None,
     template: str = RUSSE_PROMPT,
     clean_func: Callable = clean_russe_response
