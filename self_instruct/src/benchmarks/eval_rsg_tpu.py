@@ -79,8 +79,8 @@ def generate_easydel(
       prompts,
       return_tensors="jax",
       truncation=True,
-      padding='max_length',
-      max_length=1028,
+      padding=True,
+      pad_to_multiple_of = 128
   )
   output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
   if debug:
@@ -139,7 +139,7 @@ def find_lcs(s1, s2):
 
 DANETQA_PROMPT = '''Контекст: {passage}
 
-Используя контекст, ответь одним словом на вопрос: {question}.'''
+Используя контекст, ответь одним словом на вопрос: {question}. Ты должен ответить "да" или "нет".'''
 
 DANETQA_YES_RE = re.compile(
     r"^[^\w]*(Выходные данные|Выход|Ответ|Оценка)?[^\w]*(да|верно|правда|может)",
@@ -209,7 +209,7 @@ def predict_danetqa(
 
 
 TERRA_PROMPT = '''Текст: {premise} Утверждение: {hypothesis}
-Используя текст, ответь одним словом на вопрос: Вероятно ли утверждение при условии остального текста?'''
+Используя текст, ответь одним словом на вопрос: Вероятно ли утверждение при условии остального текста?. Ты должен ответить "да" или "нет".'''
 
 TERRA_ENTAILMENT_RE = re.compile(
     r"^[^\w]*(Выходные данные|Выход|Ответ|Оценка)?[^\w]*(да|верно|правда|может|являются|вероятно)",
