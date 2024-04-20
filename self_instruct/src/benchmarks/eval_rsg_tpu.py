@@ -35,9 +35,13 @@ def load_easydel(path):
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
     input_shape=(1, 1028),
-    config_kwargs={
-        "attn_mechanism": "normal",
-    },
+    config_kwargs=dict(
+        gradient_checkpointing="",
+        use_scan_mlp=False,
+        shard_attention_computation=False,
+        use_sharded_kv_caching=True,
+        attn_mechanism="local_ring"
+    ),
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
   generation_config.eos_token_id=151645
