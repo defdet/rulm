@@ -22,7 +22,7 @@ from typing import Sequence, Optional
 from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
-BATCH_SIZE = 4
+BATCH_SIZE = 8
 def load_easydel(path):
   tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
   model, params = EasyDel.AutoEasyDelModelForCausalLM.from_pretrained(
@@ -80,7 +80,6 @@ def generate_easydel(
       return_tensors="jax",
       padding=True,
       truncation=True,
-      max_length=1024,
       pad_to_multiple_of=128,
   )
   output_ids = np.array(inner_generate(model, params, data["input_ids"], data['attention_mask'], generation_config))
