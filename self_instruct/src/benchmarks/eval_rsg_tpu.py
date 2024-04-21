@@ -79,7 +79,7 @@ def generate_easydel(
       prompts,
       return_tensors="jax",
       padding=True,
-      truncuation=True,
+      truncation=True,
       max_length=1024,
       pad_to_multiple_of=128,
   )
