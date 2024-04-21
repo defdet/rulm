@@ -1,5 +1,5 @@
 {
-    "system_prompt": "Ты - русскоязычный ассистент. Ты очень строго следуешь инструкциям пользователя.",
+    "system_prompt": "Ты очень строго следуешь инструкциям пользователя. Ты всегда отвечаешь в формате, указанном пользователем.",
     "system_message_template": "<|im_start|>system\n{content}<|im_end|>\n",
     "user_message_template": "<|im_start|>user\n{content}<|im_end|>",
     "bot_message_template": "<|im_start|>assistant\n{content}<|im_end|>",
