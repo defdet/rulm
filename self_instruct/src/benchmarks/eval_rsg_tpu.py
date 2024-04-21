@@ -32,7 +32,7 @@ def load_easydel(path):
     dtype=jax.numpy.bfloat16,
     param_dtype=jax.numpy.bfloat16,
     precision=jax.lax.Precision("fastest"),
-    sharding_axis_dims=(1, -1, 1, 1),
+    sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
     input_shape=(1, 1024),
