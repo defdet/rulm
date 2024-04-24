@@ -22,10 +22,12 @@ from typing import Sequence, Optional
 from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
-BATCH_SIZE = 8
+BATCH_SIZE = 4
+MAX_LENGTH = 2048
 def load_easydel(path):
   tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
   model, params = EasyDel.AutoEasyDelModelForCausalLM.from_pretrained(
+    load_in_8bit=True,
     pretrained_model_name_or_path = path,
     device=jax.devices('cpu')[0],
     device_map="auto",
@@ -35,7 +37,7 @@ def load_easydel(path):
     sharding_axis_dims=(1, 1, 4, 4),
     sharding_axis_names=("dp", "fsdp", "tp", "sp"),
     backend="tpu",
-    input_shape=(1, 1024),
+    input_shape=(1, MAX_LENGTH),
     config_kwargs=dict(
         gradient_checkpointing="",
         use_scan_mlp=False,
@@ -78,6 +80,7 @@ def generate_easydel(
   data = tokenizer(
       prompts,
       return_tensors="jax",
+      max_length=MAX_LENGTH,
       padding=True,
       truncation=True,
       pad_to_multiple_of=128,
