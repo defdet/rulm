@@ -22,7 +22,7 @@ from typing import Sequence, Optional
 from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
-BATCH_SIZE = 4
+BATCH_SIZE = 2
 MAX_LENGTH = 2048
 def load_easydel(path):
   tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
@@ -43,7 +43,7 @@ def load_easydel(path):
         use_scan_mlp=False,
         shard_attention_computation=False,
         use_sharded_kv_caching=True,
-        attn_mechanism="normal"
+        attn_mechanism="vanilla_sharded"
     ),
   )
   generation_config=transformers.GenerationConfig.from_pretrained(path)
