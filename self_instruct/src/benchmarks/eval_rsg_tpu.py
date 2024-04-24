@@ -22,7 +22,7 @@ from typing import Sequence, Optional
 from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
-BATCH_SIZE = 2
+BATCH_SIZE = 4
 MAX_LENGTH = 2048
 def load_easydel(path):
   tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
