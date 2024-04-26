@@ -22,12 +22,12 @@ from typing import Sequence, Optional
 from jax.sharding import PartitionSpec
 
 HF_DATASET = "RussianNLP/russian_super_glue"
-BATCH_SIZE = 8
+BATCH_SIZE = 16
 MAX_LENGTH = 4096
 def load_easydel(path):
   tokenizer = transformers.AutoTokenizer.from_pretrained(path, padding_side='left')
   model, params = EasyDel.AutoEasyDelModelForCausalLM.from_pretrained(
-    load_in_8bit=True,
+    load_in_8bit=False,
     pretrained_model_name_or_path = path,
     device=jax.devices('cpu')[0],
     device_map="auto",
